@@ -1,0 +1,80 @@
+import React, { useState } from 'react';
+import { View, TextInput, Button, FlatList, Text, StyleSheet } from 'react-native';
+
+const App = () => {
+  const [enteredGoalText, setEnteredGoalText] = useState('');
+  const [courseGoals, setCourseGoals] = useState([]);
+
+  const goalInputHandler = enteredText => {
+    setEnteredGoalText(enteredText);
+  };
+
+  const addGoalHandler = () => {
+    setCourseGoals(currentCourseGoals => [...currentCourseGoals, enteredGoalText]);
+    setEnteredGoalText('');
+  };
+
+  const data = [
+    { id: '1', color: 'red' },
+    { id: '2', color: 'orange' },
+    { id: '3', color: 'yellow' },
+    { id: '4', color: 'green' },
+  ];
+
+  const ListItem = ({ color, goal }) => (
+    <View style={[styles.item, { backgroundColor: color }]}>
+      <Text style={styles.itemText}>•{goal}</Text>
+    </View>
+  );
+
+  return (
+    <View style={styles.appContainer}>
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.textInput}
+          placeholder='My Goal'
+          onChangeText={goalInputHandler}
+          value={enteredGoalText}
+        />
+        <Button title="MY GOAL" onPress={addGoalHandler} />
+      </View>
+      <FlatList
+        data={courseGoals.map((goal, index) => ({ id: index.toString(), goal: goal }))}
+        renderItem={({ item, index }) => <ListItem color={data[index % data.length].color} goal={item.goal} />}
+        keyExtractor={item => item.id}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  appContainer: {
+    paddingTop: 50,
+    paddingHorizontal: 16,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingBottom: 24,
+    borderBottomWidth: 1,
+  },
+  textInput: {
+    borderWidth: 1,
+    width: '70%',
+    marginRight: 8,
+    padding: 8,
+  },
+  item: {
+    padding: 20,
+    marginBottom: 10,
+  },
+  itemText: {
+    fontSize: 25,
+    color: 'black',
+    marginRight: 10
+  },
+ 
+});
+
+export default App;
